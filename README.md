@@ -1,7 +1,7 @@
 # YouTube video splitter - Automated pipeline
 
 ## Objective
-The present pipeline downloads a given number of YouTube videos through it's API (exposed through pytube [1]) and splits each video into a $$k$$ user-defined [TODO] length segments.
+The present pipeline downloads a given number of YouTube videos through it's API (exposed through pytube [1]) and splits each video into a *k* user-defined [TODO] length segments.
 A DB server (Docker container) is used as a metadata store in order to capture:
 1. Video ID [str(11)]
 2. Video extension (*e.g.* mp4, mov, etc.) [str]
@@ -49,32 +49,72 @@ The pipeline consists of five layers:
 5. **Failure layer** [TODO]
 
 ## Setup Guide
-- Install Docker (see installation [2])
+### Install Docker
+Install docker using the installation script
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+```
+
+Verify it runs correctly
+```
+sudo docker run hello-world
+```
+
+Add appropriate permissions
+```
+groupd add docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+Retry running without sudo
+```
+docker run hello-world
+```
+
+
+### pyenv
+This project uses pyenv as a Python version manager. The following code allows you to setup required environment:
 
 ```
+# Install dependencies
 sudo apt update; sudo apt install -y build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev \
-libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git gcc make
+libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git gcc make libpq-dev
 
+# Install pyenv
 curl https://pyenv.run | bash
 
+# Configure PATH
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 
+# Source bash
 . ~/.bashrc
 
+# Clone repository
 git clone "https://github.com/Vaporducky/video_to_pgdb"
 
 cd video_to_pgdb
 
+# Setup virtual environment
 pyenv install -v 3.10.9
 pyenv virtualenv 3.10.9 youtube_donwload
 pyenv activate youtube_donwload
+python3.10 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 ## Usage
+### Initialization
+Initialize the project environment (set up docker container and target table) running the initialization script:
+```
+bash.init
+```
+
+### Pipeline
 Create a url_file under data/ingestion which contains YouTube video URLs which point to videos **under 6 minutes**; the pipeline will fail if this condition is not met.
 Use
 
@@ -88,6 +128,6 @@ To connect to the DB you may use the following:
 
 this will place you directly in the metadata_store DB.
 
-### REFERENCES
-[]
+## REFERENCES
+[1] https://pytube.io/en/latest/api.html
 [2] https://docs.docker.com/desktop/install/linux-install/
