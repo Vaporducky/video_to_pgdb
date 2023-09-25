@@ -8,34 +8,6 @@ Created on Tue Sep 12 15:49:18 2023
 In order to install psycopg2 the following package is required:
 sudo apt-get install libpq-dev
 
-psql -h localhost -U postgres
-\list show DBs
-\dt+ show tables
-ENV POSTGRES_PASSWORD=secret
-ENV POSTGRES_USER=username
-ENV POSTGRES_DB=database
-
-In psql:
-psql postgres://username:secret@localhost:5432/metadata_store
-
-In sqlalchemy:
-postgresql://username:secret@localhost:5432/metadata_store
-
-clip_name - str - pk
-clip_file_extension - str
-clip_duration - int
-clip_location - str
-insert_timestamp - DateTime - ck
-
-SELECT *
-FROM pg_catalog.pg_tables
-WHERE
-    schemaname != 'pg_catalog' AND
-    schemaname != 'information_schema';
-
-
-"$(docker inspect test_pg_db | jq '.[0].NetworkSettings.IPAddress' | sed -E 's/"//g')"
-
 """
 # %% IMPORT PACKAGES
 from sqlalchemy import MetaData, Table, create_engine

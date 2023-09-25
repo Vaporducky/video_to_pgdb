@@ -33,7 +33,7 @@ def video_splitter(source_file_path, output_path, segment_duration=60):
     duration = video_clip.duration
     fps = video_clip.fps
 
-    # Create output pathx
+    # Create output path
     date = datetime.now().strftime('%Y%m%d')
     output_folder = Path(output_path).joinpath(date).joinpath(stem)
     output_folder.mkdir(parents=True, exist_ok=True)
@@ -58,30 +58,3 @@ def video_splitter(source_file_path, output_path, segment_duration=60):
                              codec="libx264",  # Standard codec for .mp4
                              temp_audiofile='temp-audio.m4a',
                              )
-
-# =============================================================================
-#     while True:
-#         endPos = startPos + segment_duration
-#
-#         if endPos > fullDura:
-#             endPos = fullDura
-#
-#         clip = video_clip.subclip(startPos, endPos)
-#
-#         filename = str(Path(video_clip.filename).name)
-#         segment_name = f"{i * fps * segment_duration}-{filename}.mp4"
-#         output_filename = output_folder.joinpath(
-#             segment_name + f"_{video_name}")
-#
-#         clip.write_videofile(str(output_filename),
-#                              codec="libx264",  # Standard codec for .mp4
-#                              temp_audiofile='temp-audio.m4a',
-#                              )
-#         print("part ", i, "done")
-#         i += 1
-#
-#         startPos = endPos  # jump to next clip
-#
-#         if startPos >= fullDura:
-#             break
-# =============================================================================
